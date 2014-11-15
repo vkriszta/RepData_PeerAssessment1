@@ -7,7 +7,8 @@ output:
 ==============================================================================
 ## Loading and preprocessing the data
 
-```{r}
+
+```r
 a<-read.csv("activity.csv",sep=",",header=TRUE,stringsAsFactors=FALSE)
 ```
 
@@ -15,41 +16,76 @@ a<-read.csv("activity.csv",sep=",",header=TRUE,stringsAsFactors=FALSE)
 
 Histogram of the total number of steps taken each day
 
-```{r}
+
+```r
 b<-with(a,tapply(steps,date,sum, na.rm=TRUE))
 hist(b, xlab = "Total Number of Steps Taken per Day", col="orange", main = "Total Number of Steps")
 ```
+
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 Mean total number of steps per day:
-```{r}
+
+```r
 mean(b)
 ```
 
+```
+## [1] 9354.23
+```
+
 Median total number of steps per day:
-```{r}
+
+```r
 median(b)
+```
+
+```
+## [1] 10395
 ```
 
 ## What is the average daily activity pattern?
 
-```{r}
+
+```r
 c<-with(a,tapply(steps,interval,mean, na.rm=TRUE))
 plot(unique(a$interval),c,xlab="5 minutes intervals",ylab="Average number of steps", type="l", col="red")
 ```
 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+
 The 5-minute interval, on average across all the days in the dataset, which contains the maximum number of steps
-```{r}
+
+```r
 max(c)
+```
+
+```
+## [1] 206.1698
+```
+
+```r
 cf<-c[]>206.1697
 c[cf]
+```
+
+```
+##      835 
+## 206.1698
 ```
 ## Imputing missing values
 
 Total number of missing values in the dataset
-```{r}
+
+```r
 sum(is.na(a))
 ```
+
+```
+## [1] 2304
+```
 Imputing missing values as mean of the given day
-```{r}
+
+```r
 am<-read.csv("activity.csv",sep=",",header=TRUE,stringsAsFactors=FALSE)
 d<-with(am,tapply(steps,date,mean, na.rm=TRUE))
 impcol<-d
@@ -73,14 +109,26 @@ bm<-with(am,tapply(steps,date,sum, na.rm=TRUE))
 hist(bm, xlab = "Total Number of Steps Taken per Day", col="blue", main = "Total Number of Steps after Imputing Missing Values")
 ```
 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+
 Mean total number of steps per day:
-```{r}
+
+```r
 mean(bm)
 ```
 
+```
+## [1] 10579.21
+```
+
 Median total number of steps per day:
-```{r}
+
+```r
 median(bm)
+```
+
+```
+## [1] 10395
 ```
 Imputing missing values changed the mean total number of steps per day. Mean total number of days were increased.
 
@@ -89,9 +137,17 @@ Imputing missing values did not change the median total number of steps per day.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 a$dated<-as.Date(a$date)
 Sys.setlocale("LC_TIME", "C")
+```
+
+```
+## [1] "C"
+```
+
+```r
 a$wd<-weekdays(a$dated)
 
 for (i in seq_along(a[,5])){
@@ -115,3 +171,5 @@ plot(unique(a$interval),c1,xlab="5 minutes intervals",ylab="Average number of st
 c1<-with(a2,tapply(steps,interval,mean, na.rm=TRUE))
 plot(unique(a$interval),c1,xlab="5 minutes intervals",ylab="Average number of steps on weekend days", type="l", col="blue")
 ```
+
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
